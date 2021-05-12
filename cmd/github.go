@@ -1,14 +1,16 @@
 package cmd
 
-import "Stone_GitHub_API_Golang/env"
+import (
+	"Stone_GitHub_API_Golang/env"
+	"fmt"
+)
 
-
-// GenerateAuthenticationHeader using the personal access token at .env
-func GenerateAuthenticationHeader()  {
+// GenerateAuthenticationHeader generates the header used to authorize our requests using the personal access token stored at .env
+func GenerateAuthenticationHeader() (key string, value string) {
 	personalToken := env.Get("GITHUB_PERSONAL_ACCESS_TOKEN")
-	header :=
-	{
-	Authorization: personalToken
-	}
-	return header
+
+	header := fmt.Sprintf("token %s", personalToken)
+
+	key = "Authentication"
+	return key, header
 }
