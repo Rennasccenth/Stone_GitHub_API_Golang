@@ -1,36 +1,34 @@
 package main
 
 import (
-	"Stone_GitHub_API_Golang/cmd"
 	"Stone_GitHub_API_Golang/controllers"
 	"Stone_GitHub_API_Golang/env"
 	"fmt"
+	"github.com/gorilla/mux"
+	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	http.HandleFunc("/users/{user}/popular-repository",
-		controllers.GetUserMostStarredRepo)
+	router := mux.NewRouter()
 
-	http.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
-		controllers.GetUserMostCommentedOpenedIssue)
+	router.HandleFunc("/users/{user}/popular-repository",
+		controllers.GetUserMostStarredRepo).Methods(http.MethodGet)
 
-	http.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
-		controllers.GetUserOpenedPullRequests)
+	router.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
+		controllers.GetUserMostCommentedOpenedIssue).Methods(http.MethodGet)
 
-	serveOnDefaultPort()
-	cmd.GenerateAuthenticationHeader()
+	router.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
+		controllers.GetUserOpenedPullRequests).Methods(http.MethodGet)
+
+	serveOnDefaultPort(router)
 }
 
-// serveOnDefaultPort serves the application on the default port stored
-// on .env as APPLICATION_PORT
-func serveOnDefaultPort() {
+// serveOnDefaultPort serves the handler on the port
+// stored on .env as APPLICATION_PORT
+func serveOnDefaultPort(handler http.Handler) {
 	applicationPort := env.Get("APPLICATION_PORT")
 	addr := fmt.Sprintf(":%s", applicationPort)
-	err := http.ListenAndServe(addr, nil)
-	if err != nil {
-		fmt.Printf("Falha ao servir a aplicação na porta %s.", applicationPort)
-		os.Exit(1)
-	}
+	log.Printf("Subindo API na porta %s.", addr)
+	log.Fatal(http.ListenAndServe(addr, handler))
 }
