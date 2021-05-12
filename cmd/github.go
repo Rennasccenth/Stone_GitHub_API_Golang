@@ -5,7 +5,8 @@ import (
 	"fmt"
 )
 
-// GenerateAuthenticationHeader generates the header used to authorize our requests using the personal access token stored at .env
+// GenerateAuthenticationHeader generates the header used to authorize
+// our requests using the personal access token stored at .env
 func GenerateAuthenticationHeader() (key string, value string) {
 	personalToken := env.Get("GITHUB_PERSONAL_ACCESS_TOKEN")
 

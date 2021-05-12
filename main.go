@@ -6,23 +6,31 @@ import (
 	"Stone_GitHub_API_Golang/env"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func main() {
-	http.HandleFunc("/users/", controllers.GetUserMostStarredRepos)
-	http.HandleFunc("/users", controllers.GetUserMostStarredRepos)
-	http.HandleFunc("/user", controllers.GetUserMostStarredRepos)
+	http.HandleFunc("/users/{user}/popular-repository",
+		controllers.GetUserMostStarredRepo)
+
+	http.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
+		controllers.GetUserMostCommentedOpenedIssue)
+
+	http.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
+		controllers.GetUserOpenedPullRequests)
 
 	serveOnDefaultPort()
 	cmd.GenerateAuthenticationHeader()
 }
 
-// serveOnDefaultPort serve the application on the default port stored on .env as APPLICATION_PORT
+// serveOnDefaultPort serves the application on the default port stored
+// on .env as APPLICATION_PORT
 func serveOnDefaultPort() {
 	applicationPort := env.Get("APPLICATION_PORT")
 	addr := fmt.Sprintf(":%s", applicationPort)
 	err := http.ListenAndServe(addr, nil)
 	if err != nil {
-		fmt.Printf("Não foi possível subir o servidor na porta %s", applicationPort)
+		fmt.Printf("Falha ao servir a aplicação na porta %s.", applicationPort)
+		os.Exit(1)
 	}
 }
