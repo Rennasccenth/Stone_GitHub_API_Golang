@@ -28,6 +28,9 @@ func main() {
 // stored on .env as APPLICATION_PORT
 func serveOnDefaultPort(handler http.Handler) {
 	applicationPort := env.Get("APPLICATION_PORT")
+	if applicationPort == "" {
+		applicationPort = "8080"
+	}
 	addr := fmt.Sprintf(":%s", applicationPort)
 	log.Printf("Subindo API na porta %s.", addr)
 	log.Fatal(http.ListenAndServe(addr, handler))
