@@ -1,0 +1,30 @@
+{
+	"info": {
+		"_postman_id": "27f26f39-5b50-487c-9873-4425b7559771",
+		"name": "Stone Desafio API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get User Most Popular Repository",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/rennasccenth/popular-repository",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"rennasccenth",
+						"popular-repository"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
