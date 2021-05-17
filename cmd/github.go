@@ -174,7 +174,9 @@ func generateAuthenticationHeader() (key string, value string) {
 	return key, header
 }
 
-func getMostStarredRepository(repos []Repository) Repository {
+// calculateMostStarredRepository calculates the most starred
+// repository over a []Repository and returns it
+func calculateMostStarredRepository(repos []Repository) Repository {
 	mostStarredIndex := -1
 	stars := 0
 	for i, repo := range repos {
@@ -186,6 +188,8 @@ func getMostStarredRepository(repos []Repository) Repository {
 	return repos[mostStarredIndex]
 }
 
+// generateCommonHeader generates a common http.Header used to
+// make a http.Request to GitHub API
 func generateCommonHeader() http.Header {
 	hostname, _ := os.Hostname()
 	header := http.Header{}
@@ -209,7 +213,7 @@ func generateUserFromBody(requestBody io.Reader) User {
 	return user
 }
 
-// getGitHubUser get a User from GitHub API
+// getGitHubUser get a User instance from GitHub API
 func getGitHubUser(user string) User {
 	formatedEndpoint := fmt.Sprintf("/users/%s", user)
 	buildedURL := gitHubBaseUrl + formatedEndpoint
