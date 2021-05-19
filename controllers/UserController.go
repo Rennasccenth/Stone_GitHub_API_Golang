@@ -13,14 +13,13 @@ func GetUserMostStarredRepo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userParam := params["user"]
 
-	//gitHubUser := cmd.GetGitHubUser(userParam)
-	gitHubUser := cmd.User{Login: userParam}
+	mostStarredRepo := cmd.GetMostStarredRepository(userParam)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
 
-	marshalUser, _ := json.Marshal(gitHubUser)
-	_, err := w.Write(marshalUser)
+	marshalRepo, _ := json.Marshal(mostStarredRepo)
+	_, err := w.Write(marshalRepo)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)

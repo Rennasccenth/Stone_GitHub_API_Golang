@@ -59,6 +59,10 @@ type User struct {
 	} `json:"plan"`
 }
 
+type RepositoryResponse struct {
+	Collection []Repository
+}
+
 type Repository struct {
 	Id       int    `json:"id"`
 	NodeId   string `json:"node_id"`
@@ -163,6 +167,44 @@ type Repository struct {
 
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 
+func GetMostStarredRepository(userLogin string) Repository {
+	user := getGitHubUser(userLogin)
+
+	repositoriesURL := user.ReposUrl
+
+	client := http.Client{}
+
+	preparedRequest, _ := http.NewRequest(http.MethodGet, repositoriesURL, nil)
+
+	response, err := client.Do(preparedRequest)
+	if err != nil {
+		log.Printf("Error na requisição de repositórios.")
+		return Repository{}
+	}
+
+	repositories := makeRepositoriesFromBody(response.Body)
+
+	mostStarredRepo := findMostStarredRepository(repositories)
+
+	return mostStarredRepo
+}
+
+// getGitHubUser get a User instance from GitHub API
+func getGitHubUser(user string) User {
+	formatedEndpoint := fmt.Sprintf("/users/%s", user)
+	buildedURL := gitHubBaseUrl + formatedEndpoint
+	userRequest, _ := http.NewRequest(http.MethodGet, buildedURL, nil)
+
+	userRequest.Header = generateCommonHeader()
+	client := http.Client{}
+	userResponse, err := client.Do(userRequest)
+	if err != nil {
+		log.Print(err)
+	}
+	var gitHubUser = generateUserFromBody(userResponse.Body)
+	return gitHubUser
+}
+
 // GenerateAuthenticationHeader generates the header kv used to authorize
 // our requests using the personal access token stored at .env
 func generateAuthenticationHeader() (key string, value string) {
@@ -174,18 +216,18 @@ func generateAuthenticationHeader() (key string, value string) {
 	return key, header
 }
 
-// calculateMostStarredRepository calculates the most starred
+// findMostStarredRepository finds the most starred
 // repository over a []Repository and returns it
-func calculateMostStarredRepository(repos []Repository) Repository {
-	mostStarredIndex := -1
-	stars := 0
-	for i, repo := range repos {
-		if repo.StargazersCount >= stars {
-			mostStarredIndex = i
-			stars = repo.StargazersCount
+func findMostStarredRepository(repos []Repository) Repository {
+	var mostStarred Repository
+	starThreshold := 0
+	for _, repo := range repos {
+		if repo.StargazersCount >= starThreshold {
+			mostStarred = repo
+			starThreshold = repo.StargazersCount
 		}
 	}
-	return repos[mostStarredIndex]
+	return mostStarred
 }
 
 // generateCommonHeader generates a common http.Header used to
@@ -213,19 +255,15 @@ func generateUserFromBody(requestBody io.Reader) User {
 	return user
 }
 
-// getGitHubUser get a User instance from GitHub API
-func getGitHubUser(user string) User {
-	formatedEndpoint := fmt.Sprintf("/users/%s", user)
-	buildedURL := gitHubBaseUrl + formatedEndpoint
-	userRequest, _ := http.NewRequest(http.MethodGet, buildedURL, nil)
-
-	userRequest.Header = generateCommonHeader()
-	client := http.Client{}
-	userResponse, err := client.Do(userRequest)
+// makeRepositoriesFromBody creates a array of
+// Repository from a io.Reader generally provided
+// by a http.Request
+func makeRepositoriesFromBody(requestBody io.Reader) []Repository {
+	bodyBytes, _ := ioutil.ReadAll(requestBody)
+	repos := make([]Repository, 0)
+	err := json.Unmarshal(bodyBytes, &repos)
 	if err != nil {
 		log.Print(err)
 	}
-	var gitHubUser = generateUserFromBody(userResponse.Body)
-
-	return gitHubUser
+	return repos
 }
