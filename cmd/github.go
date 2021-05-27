@@ -38,3 +38,7 @@ func NewDefaultGitHubClient() http.Client {
 func QuebrandobranchPraTesteDePR(){
 	fmt.Print("Test")
 }
+
+func QuebrandobranchPraTesteDePRNum2(){
+	fmt.Print("Test_2")
+}
