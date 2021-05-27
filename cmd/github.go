@@ -59,10 +59,6 @@ type User struct {
 	} `json:"plan"`
 }
 
-type RepositoryResponse struct {
-	Collection []Repository
-}
-
 type Repository struct {
 	Id       int    `json:"id"`
 	NodeId   string `json:"node_id"`
@@ -165,7 +161,62 @@ type Repository struct {
 	stars int
 }
 
+type Issue struct {
+	Url           string `json:"url"`
+	RepositoryUrl string `json:"repository_url"`
+	LabelsUrl     string `json:"labels_url"`
+	CommentsUrl   string `json:"comments_url"`
+	EventsUrl     string `json:"events_url"`
+	HtmlUrl       string `json:"html_url"`
+	Id            int    `json:"id"`
+	NodeId        string `json:"node_id"`
+	Number        int    `json:"number"`
+	Title         string `json:"title"`
+	User          struct {
+		Login             string `json:"login"`
+		Id                int    `json:"id"`
+		NodeId            string `json:"node_id"`
+		AvatarUrl         string `json:"avatar_url"`
+		GravatarId        string `json:"gravatar_id"`
+		Url               string `json:"url"`
+		HtmlUrl           string `json:"html_url"`
+		FollowersUrl      string `json:"followers_url"`
+		FollowingUrl      string `json:"following_url"`
+		GistsUrl          string `json:"gists_url"`
+		StarredUrl        string `json:"starred_url"`
+		SubscriptionsUrl  string `json:"subscriptions_url"`
+		OrganizationsUrl  string `json:"organizations_url"`
+		ReposUrl          string `json:"repos_url"`
+		EventsUrl         string `json:"events_url"`
+		ReceivedEventsUrl string `json:"received_events_url"`
+		Type              string `json:"type"`
+		SiteAdmin         bool   `json:"site_admin"`
+	} `json:"user"`
+	Labels                []interface{} `json:"labels"`
+	State                 string        `json:"state"`
+	Locked                bool          `json:"locked"`
+	Assignee              interface{}   `json:"assignee"`
+	Assignees             []interface{} `json:"assignees"`
+	Milestone             interface{}   `json:"milestone"`
+	Comments              int           `json:"comments"`
+	CreatedAt             time.Time     `json:"created_at"`
+	UpdatedAt             time.Time     `json:"updated_at"`
+	ClosedAt              interface{}   `json:"closed_at"`
+	AuthorAssociation     string        `json:"author_association"`
+	ActiveLockReason      interface{}   `json:"active_lock_reason"`
+	Body                  string        `json:"body"`
+	PerformedViaGithubApp interface{}   `json:"performed_via_github_app"`
+}
+
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
+
+func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
+	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
+
+	mostCommentedIssue := findMostCommentedOpenedIssue(repositoryIssues)
+
+	return mostCommentedIssue
+}
 
 func GetMostStarredRepository(userLogin string) Repository {
 	user := getGitHubUser(userLogin)
@@ -187,6 +238,30 @@ func GetMostStarredRepository(userLogin string) Repository {
 	mostStarredRepo := findMostStarredRepository(repositories)
 
 	return mostStarredRepo
+}
+
+// getRepositoryIssues gets a array of Issue based on a userLogin and
+// a repository
+func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
+	issuesRepositoryEndpoint :=
+		fmt.Sprintf("/repos/%s/%s/issues", userLogin, repositoryName)
+
+	url := gitHubBaseUrl + issuesRepositoryEndpoint
+
+	issuesRequest, _ := http.NewRequest(http.MethodGet, url, nil)
+	issuesRequest.Header = generateCommonHeader()
+
+	client := http.Client{}
+
+	request, err := client.Do(issuesRequest)
+	if err != nil {
+		log.Printf("Error na requisição das issues do %s.", repositoryName)
+		return nil
+	}
+
+	issues := generateIssuesFromBody(request.Body)
+
+	return issues
 }
 
 // getGitHubUser get a User instance from GitHub API
@@ -230,6 +305,21 @@ func findMostStarredRepository(repos []Repository) Repository {
 	return mostStarred
 }
 
+// findMostCommentedOpenedIssue find the most commented and opened
+// Issue
+func findMostCommentedOpenedIssue(issues []Issue) Issue {
+	var mostCommentedOpenedIssue Issue
+	commentThreshold := 0
+	for _, issue := range issues {
+		if issue.State == "open" &&
+			issue.Comments >= commentThreshold {
+			mostCommentedOpenedIssue = issue
+			commentThreshold = issue.Comments
+		}
+	}
+	return mostCommentedOpenedIssue
+}
+
 // generateCommonHeader generates a common http.Header used to
 // make a http.Request to GitHub API
 func generateCommonHeader() http.Header {
@@ -253,6 +343,19 @@ func generateUserFromBody(requestBody io.Reader) User {
 		log.Print(err)
 	}
 	return user
+}
+
+// generateIssuesFromBody creates a array of
+// Issue from a io.Reader generally provided
+// by a http.Request
+func generateIssuesFromBody(requestBody io.Reader) []Issue {
+	bodyBytes, _ := ioutil.ReadAll(requestBody)
+	issues := make([]Issue, 0)
+	err := json.Unmarshal(bodyBytes, &issues)
+	if err != nil {
+		log.Print(err)
+	}
+	return issues
 }
 
 // makeRepositoriesFromBody creates a array of

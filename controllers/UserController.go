@@ -18,8 +18,8 @@ func GetUserMostStarredRepo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
 
-	marshalRepo, _ := json.Marshal(mostStarredRepo)
-	_, err := w.Write(marshalRepo)
+	marshalResp, _ := json.Marshal(mostStarredRepo)
+	_, err := w.Write(marshalResp)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
@@ -30,10 +30,18 @@ func GetUserMostCommentedOpenedIssue(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	user := params["user"]
 	repository := params["repository"]
-	writable := user + repository
-	_, err := w.Write([]byte(writable))
+
+	mostCommentedOpenedIssue := cmd.GetMostCommentedIssues(user, repository)
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Date", time.Now().String())
+
+	marshalResp, _ := json.Marshal(mostCommentedOpenedIssue)
+
+	_, err := w.Write(marshalResp)
 	if err != nil {
-		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Print(err)
 	}
 }
 
