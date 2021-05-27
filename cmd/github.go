@@ -209,6 +209,7 @@ type Issue struct {
 }
 
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
+var gitHubCommonHeader = generateCommonHeader()
 
 func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
 	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
@@ -226,6 +227,7 @@ func GetMostStarredRepository(userLogin string) Repository {
 	client := http.Client{}
 
 	preparedRequest, _ := http.NewRequest(http.MethodGet, repositoriesURL, nil)
+	preparedRequest.Header = gitHubCommonHeader
 
 	response, err := client.Do(preparedRequest)
 	if err != nil {
@@ -249,7 +251,7 @@ func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 	url := gitHubBaseUrl + issuesRepositoryEndpoint
 
 	issuesRequest, _ := http.NewRequest(http.MethodGet, url, nil)
-	issuesRequest.Header = generateCommonHeader()
+	issuesRequest.Header = gitHubCommonHeader
 
 	client := http.Client{}
 
@@ -268,15 +270,18 @@ func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 func getGitHubUser(user string) User {
 	formatedEndpoint := fmt.Sprintf("/users/%s", user)
 	buildedURL := gitHubBaseUrl + formatedEndpoint
-	userRequest, _ := http.NewRequest(http.MethodGet, buildedURL, nil)
 
-	userRequest.Header = generateCommonHeader()
+	userRequest, _ := http.NewRequest(http.MethodGet, buildedURL, nil)
+	userRequest.Header = gitHubCommonHeader
+
 	client := http.Client{}
 	userResponse, err := client.Do(userRequest)
 	if err != nil {
 		log.Print(err)
 	}
+
 	var gitHubUser = generateUserFromBody(userResponse.Body)
+
 	return gitHubUser
 }
 
