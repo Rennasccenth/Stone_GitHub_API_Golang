@@ -33,3 +33,8 @@ func NewDefaultGitHubClient() http.Client {
 	}
 	return gitHubClient
 }
+
+
+func QuebrandobranchPraTesteDePR(){
+	fmt.Print("Test")
+}
