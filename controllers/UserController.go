@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	handler "Stone_GitHub_API_Golang/hander"
+	handler "Stone_GitHub_API_Golang/handler"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
@@ -13,7 +13,7 @@ func GetUserMostStarredRepo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userParam := params["user"]
 
-	mostStarredRepo := handler.GetMostStarredRepository(userParam)
+	mostStarredRepo := handler.GetUserMostStarredRepository(userParam)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())

@@ -15,9 +15,9 @@ func startCacheLayer() *cache.Cache {
 	return c
 }
 
-// GetMostStarredRepository tries to get the most starred cmd.Repository
+// GetUserMostStarredRepository tries to get the most starred cmd.Repository
 // on cache layer. If not found, fetches and updates the cache.
-func GetMostStarredRepository(userLogin string) cmd.Repository {
+func GetUserMostStarredRepository(userLogin string) cmd.Repository {
 	cacheKey := fmt.Sprintf("{Action_1}{%s}", userLogin)
 	var mostStarredRepo cmd.Repository
 
