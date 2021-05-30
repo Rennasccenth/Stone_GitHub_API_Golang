@@ -1,21 +1,22 @@
 package handler
 
 import (
+	"github.com/dchest/uniuri"
 	"reflect"
 	"testing"
 )
 
-func TestGetUserMostStarredRepository(t *testing.T) {
-	userNameTest := "Rennasccenth"
-	expectedResult := "Rennasccenth/Stone_GitHub_API_Golang"
+func TestCacheOnGetUserMostStarredRepository(t *testing.T) {
+	mockRandomUsername := uniuri.NewLen(10)
 
-	result := GetUserMostStarredRepository(userNameTest)
-	evaluatedResult := result.FullName
+	_, isCached := GetUserMostStarredRepository(mockRandomUsername)
 
-	if reflect.DeepEqual(evaluatedResult, expectedResult) {
-		t.Log("GetMostStarredRepository PASSED")
+	_, isCached = GetUserMostStarredRepository(mockRandomUsername)
+
+	if reflect.DeepEqual(isCached, true) {
+		t.Log("CacheOnGetUserMostStarredRepository PASSED")
 	} else {
-		t.Errorf("GetMostStarredRepository FAILED, expected %v but got %v",
-			evaluatedResult, expectedResult)
+		t.Errorf("CacheOnGetUserMostStarredRepository FAILED, expected %v but got %v",
+			true, isCached)
 	}
 }

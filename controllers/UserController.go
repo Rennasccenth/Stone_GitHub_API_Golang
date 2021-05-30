@@ -13,7 +13,7 @@ func GetUserMostStarredRepo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userParam := params["user"]
 
-	mostStarredRepo := handler.GetUserMostStarredRepository(userParam)
+	mostStarredRepo, _ := handler.GetUserMostStarredRepository(userParam)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
@@ -31,7 +31,7 @@ func GetUserMostCommentedOpenedIssue(w http.ResponseWriter, r *http.Request) {
 	user := params["user"]
 	repository := params["repository"]
 
-	mostCommentedOpenedIssue := handler.GetMostCommentedIssue(user, repository)
+	mostCommentedOpenedIssue, _ := handler.GetMostCommentedIssue(user, repository)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
@@ -50,7 +50,7 @@ func GetUserOpenedPullRequests(w http.ResponseWriter, r *http.Request) {
 	user := params["user"]
 	repository := params["repository"]
 
-	nonInteractedPullRequests := handler.GetNonInteractedPullRequests(user, repository)
+	nonInteractedPullRequests, _ := handler.GetNonInteractedPullRequests(user, repository)
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())

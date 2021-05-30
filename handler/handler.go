@@ -17,51 +17,48 @@ func startCacheLayer() *cache.Cache {
 
 // GetUserMostStarredRepository tries to get the most starred cmd.Repository
 // on cache layer. If not found, fetches and updates the cache.
-func GetUserMostStarredRepository(userLogin string) cmd.Repository {
+func GetUserMostStarredRepository(userLogin string) (mostStarredRepo cmd.Repository, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_1}{%s}", userLogin)
-	var mostStarredRepo cmd.Repository
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
 		mostStarredRepo, _ = cachedResponse.(cmd.Repository)
-		return mostStarredRepo
+		return mostStarredRepo, true
 	}
 	mostStarredRepo = cmd.GetUserMostStarredRepository(userLogin)
 	cacheLayer.Set(cacheKey, mostStarredRepo, cache.DefaultExpiration)
 
-	return mostStarredRepo
+	return mostStarredRepo, false
 }
 
 // GetMostCommentedIssue tries to get the most commented cmd.Issue
 // on cache layer. If not found , fetches and updates the cache
-func GetMostCommentedIssue(user string, repository string) cmd.Issue {
+func GetMostCommentedIssue(user string, repository string) (mostCommentedOpenedIssue cmd.Issue, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_2}{%s}{%s}", user, repository)
-	var mostCommentedOpenedIssue cmd.Issue
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
 		mostCommentedOpenedIssue = cachedResponse.(cmd.Issue)
-		return mostCommentedOpenedIssue
+		return mostCommentedOpenedIssue, true
 	}
 	mostCommentedOpenedIssue = cmd.GetMostCommentedIssue(user, repository)
 	cacheLayer.Set(cacheKey, mostCommentedOpenedIssue, cache.DefaultExpiration)
 
-	return mostCommentedOpenedIssue
+	return mostCommentedOpenedIssue, false
 }
 
 // GetNonInteractedPullRequests tries to get all non interacted cmd.PullRequest
 // of a cmd.Repository on cache layer. If not found , fetches and updates the cache.
-func GetNonInteractedPullRequests(user string, repository string) []cmd.PullRequest {
+func GetNonInteractedPullRequests(user string, repository string) (nonInteractedPullRequests []cmd.PullRequest, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_3}{%s}{%s}", user, repository)
-	var nonInteractedPullRequests []cmd.PullRequest
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
 		nonInteractedPullRequests, _ = cachedResponse.([]cmd.PullRequest)
-		return nonInteractedPullRequests
+		return nonInteractedPullRequests, true
 	}
 	nonInteractedPullRequests = cmd.GetNonInteractedPullRequests(user, repository)
 	cacheLayer.Set(cacheKey, nonInteractedPullRequests, cache.DefaultExpiration)
 
-	return nonInteractedPullRequests
+	return nonInteractedPullRequests, false
 }

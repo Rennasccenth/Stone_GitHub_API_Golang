@@ -574,6 +574,7 @@ func GetNonInteractedPullRequests(userLogin string, repositoryName string) []Pul
 func getUserRepositories(userName string) []Repository {
 	repositoriesEndpoint := fmt.Sprintf("/users/%s/repos", userName)
 	url := gitHubBaseUrl + repositoriesEndpoint
+	var repositories []Repository
 	client := http.Client{}
 
 	preparedRequest, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -585,7 +586,9 @@ func getUserRepositories(userName string) []Repository {
 		return nil
 	}
 
-	repositories := makeRepositoriesFromBody(repositoriesResponse.Body)
+	if repositoriesResponse.StatusCode == http.StatusOK {
+		repositories = makeRepositoriesFromBody(repositoriesResponse.Body)
+	}
 	return repositories
 }
 
@@ -593,6 +596,7 @@ func getUserRepositories(userName string) []Repository {
 func getPullRequests(userLogin string, repositoryName string) []PullRequest {
 	pullRequestsEndpoint :=
 		fmt.Sprintf("/repos/%s/%s/pulls", userLogin, repositoryName)
+	var pullRequests []PullRequest
 	url := gitHubBaseUrl + pullRequestsEndpoint
 
 	preparedRequest, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -605,7 +609,9 @@ func getPullRequests(userLogin string, repositoryName string) []PullRequest {
 		return nil
 	}
 
-	pullRequests := makePullRequestsFromBody(pullRequestResponse.Body)
+	if pullRequestResponse.StatusCode == http.StatusOK {
+		pullRequests = makePullRequestsFromBody(pullRequestResponse.Body)
+	}
 
 	return pullRequests
 }
@@ -615,6 +621,7 @@ func getPullRequests(userLogin string, repositoryName string) []PullRequest {
 func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 	issuesRepositoryEndpoint :=
 		fmt.Sprintf("/repos/%s/%s/issues", userLogin, repositoryName)
+	var issues []Issue
 	url := gitHubBaseUrl + issuesRepositoryEndpoint
 
 	issuesRequest, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -628,7 +635,9 @@ func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 		return nil
 	}
 
-	issues := generateIssuesFromBody(issuesResponse.Body)
+	if issuesResponse.StatusCode == http.StatusOK {
+		issues = generateIssuesFromBody(issuesResponse.Body)
+	}
 
 	return issues
 }
@@ -701,6 +710,7 @@ func fillComments(pullRequests []PullRequest) []PullRequest {
 // fetchPullRequestComments get a PullRequest with comments field
 func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
 	client := http.Client{}
+	var buffer PullRequest
 
 	preparedRequest, _ := http.NewRequest(http.MethodGet, pullRequest.Url, nil)
 	preparedRequest.Header = gitHubCommonHeader
@@ -708,8 +718,11 @@ func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
 	pullRequestResponse, _ := client.Do(preparedRequest)
 
 	bodyBytes, _ := ioutil.ReadAll(pullRequestResponse.Body)
-	buffer := PullRequest{}
-	_ = json.Unmarshal(bodyBytes, &buffer)
+
+	if pullRequestResponse.StatusCode == http.StatusOK {
+		buffer = PullRequest{}
+		_ = json.Unmarshal(bodyBytes, &buffer)
+	}
 
 	return buffer
 }
@@ -789,6 +802,7 @@ func makeRepositoriesFromBody(requestBody io.Reader) []Repository {
 	repos := make([]Repository, 0)
 	err := json.Unmarshal(bodyBytes, &repos)
 	if err != nil {
+		log.Printf("é aqui no makeRepositoriesFromBody")
 		log.Print(err)
 	}
 
