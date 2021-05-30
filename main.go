@@ -10,18 +10,18 @@ import (
 )
 
 func main() {
-	router := mux.NewRouter()
+	routerHander := mux.NewRouter()
 
-	router.HandleFunc("/users/{user}/popular-repository",
+	routerHander.HandleFunc("/users/{user}/popular-repository",
 		controllers.GetUserMostStarredRepo).Methods(http.MethodGet)
 
-	router.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
+	routerHander.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
 		controllers.GetUserMostCommentedOpenedIssue).Methods(http.MethodGet)
 
-	router.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
+	routerHander.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
 		controllers.GetUserOpenedPullRequests).Methods(http.MethodGet)
 
-	serveOnDefaultPort(router)
+	serveOnDefaultPort(routerHander)
 }
 
 // serveOnDefaultPort serves the handler on the port

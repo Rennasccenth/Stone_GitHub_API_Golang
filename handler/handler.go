@@ -26,7 +26,7 @@ func GetMostStarredRepository(userLogin string) cmd.Repository {
 		mostStarredRepo, _ = cachedResponse.(cmd.Repository)
 		return mostStarredRepo
 	}
-	mostStarredRepo = cmd.GetMostStarredRepository(userLogin)
+	mostStarredRepo = cmd.GetUserMostStarredRepository(userLogin)
 	cacheLayer.Set(cacheKey, mostStarredRepo, cache.DefaultExpiration)
 
 	return mostStarredRepo
