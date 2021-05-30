@@ -542,6 +542,8 @@ type PullRequest struct {
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 var gitHubCommonHeader = generateCommonHeader()
 
+// GetMostStarredRepository get the user's most starred repository
+// on the GitHub API
 func GetMostStarredRepository(userLogin string) Repository {
 	repositories := getUserRepositories(userLogin)
 	mostStarredRepo := findMostStarredRepository(repositories)
@@ -549,13 +551,17 @@ func GetMostStarredRepository(userLogin string) Repository {
 	return mostStarredRepo
 }
 
-func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
+// GetMostCommentedIssue get the most commented Issue of a user's
+// Repository on the GitHub API
+func GetMostCommentedIssue(userLogin string, repositoryName string) Issue {
 	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
 	mostCommentedIssue := findMostCommentedOpenedIssue(repositoryIssues)
 
 	return mostCommentedIssue
 }
 
+// GetNonInteractedPullRequests get all non interacted PullRequest
+// of a user's Repository on the GitHub API
 func GetNonInteractedPullRequests(userLogin string, repositoryName string) []PullRequest {
 	pullRequestsOnRepo := getPullRequests(userLogin, repositoryName)
 	nonInteractedPullRequests := filterNonInteractedPullRequests(pullRequestsOnRepo)
