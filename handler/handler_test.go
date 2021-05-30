@@ -44,9 +44,9 @@ func TestCacheGetNonInteractedPullRequests(t *testing.T) {
 	_, isCached = GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
 
 	if reflect.DeepEqual(isCached, true) {
-		t.Log("GetNonInteractedPullRequests PASSED")
+		t.Log("TestCacheGetNonInteractedPullRequests PASSED")
 	} else {
-		t.Errorf("GetNonInteractedPullRequests FAILED, expected %v but got %v",
+		t.Errorf("TestCacheGetNonInteractedPullRequests FAILED, expected %v but got %v",
 			true, isCached)
 	}
 }
