@@ -542,9 +542,9 @@ type PullRequest struct {
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 var gitHubCommonHeader = generateCommonHeader()
 
-// GetMostStarredRepository get the user's most starred repository
+// GetUserMostStarredRepository get the user's most starred repository
 // on the GitHub API
-func GetMostStarredRepository(userLogin string) Repository {
+func GetUserMostStarredRepository(userLogin string) Repository {
 	repositories := getUserRepositories(userLogin)
 	mostStarredRepo := findMostStarredRepository(repositories)
 
@@ -564,7 +564,8 @@ func GetMostCommentedIssue(userLogin string, repositoryName string) Issue {
 // of a user's Repository on the GitHub API
 func GetNonInteractedPullRequests(userLogin string, repositoryName string) []PullRequest {
 	pullRequestsOnRepo := getPullRequests(userLogin, repositoryName)
-	nonInteractedPullRequests := filterNonInteractedPullRequests(pullRequestsOnRepo)
+	filledPullRequests := fillComments(pullRequestsOnRepo)
+	nonInteractedPullRequests := filterNonInteractedPullRequests(filledPullRequests)
 
 	return nonInteractedPullRequests
 }
@@ -681,9 +682,8 @@ func findMostStarredRepository(repos []Repository) Repository {
 // filterNonInteractedPullRequests get only non interacted PullRequest
 // in a array of PullRequest
 func filterNonInteractedPullRequests(pullRequests []PullRequest) []PullRequest {
-	// Nota: Por padrão da API os PR's retornados já estão com status OPEN ;)
-	filledPullRequests := fillComments(pullRequests)
-	filteredPullRequests := removeInteractedPullRequests(filledPullRequests)
+
+	filteredPullRequests := removeInteractedPullRequests(pullRequests)
 
 	return filteredPullRequests
 }
@@ -731,12 +731,10 @@ func removeInteractedPullRequests(prs []PullRequest) []PullRequest {
 // Issue
 func findMostCommentedOpenedIssue(issues []Issue) Issue {
 	var mostCommentedOpenedIssue Issue
-	commentThreshold := 0
 	for _, issue := range issues {
 		if issue.State == "open" &&
-			issue.Comments >= commentThreshold {
+			issue.Comments > mostCommentedOpenedIssue.Comments {
 			mostCommentedOpenedIssue = issue
-			commentThreshold = issue.Comments
 		}
 	}
 
