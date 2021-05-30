@@ -19,6 +19,7 @@ func startCacheLayer() *cache.Cache {
 // on cache layer. If not found, fetches and updates the cache.
 func GetUserMostStarredRepository(userLogin string) (mostStarredRepo cmd.Repository, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_1}{%s}", userLogin)
+	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
@@ -35,6 +36,7 @@ func GetUserMostStarredRepository(userLogin string) (mostStarredRepo cmd.Reposit
 // on cache layer. If not found , fetches and updates the cache
 func GetMostCommentedIssue(user string, repository string) (mostCommentedOpenedIssue cmd.Issue, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_2}{%s}{%s}", user, repository)
+	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
@@ -51,6 +53,7 @@ func GetMostCommentedIssue(user string, repository string) (mostCommentedOpenedI
 // of a cmd.Repository on cache layer. If not found , fetches and updates the cache.
 func GetNonInteractedPullRequests(user string, repository string) (nonInteractedPullRequests []cmd.PullRequest, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_3}{%s}{%s}", user, repository)
+	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {

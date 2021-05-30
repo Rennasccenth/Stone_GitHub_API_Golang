@@ -20,3 +20,33 @@ func TestCacheOnGetUserMostStarredRepository(t *testing.T) {
 			true, isCached)
 	}
 }
+
+func TestCacheGetMostCommentedIssue(t *testing.T) {
+	mockRandomUsername := uniuri.NewLen(10)
+	mockRandomRepository := uniuri.NewLen(10)
+
+	_, isCached := GetMostCommentedIssue(mockRandomUsername, mockRandomRepository)
+	_, isCached = GetMostCommentedIssue(mockRandomUsername, mockRandomRepository)
+
+	if reflect.DeepEqual(isCached, true) {
+		t.Log("TestCacheGetMostCommentedIssue PASSED")
+	} else {
+		t.Errorf("TestCacheGetMostCommentedIssue FAILED, expected %v but got %v",
+			true, isCached)
+	}
+}
+
+func TestCacheGetNonInteractedPullRequests(t *testing.T) {
+	mockRandomUsername := uniuri.NewLen(10)
+	mockRandomRepository := uniuri.NewLen(10)
+
+	_, isCached := GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
+	_, isCached = GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
+
+	if reflect.DeepEqual(isCached, true) {
+		t.Log("GetNonInteractedPullRequests PASSED")
+	} else {
+		t.Errorf("GetNonInteractedPullRequests FAILED, expected %v but got %v",
+			true, isCached)
+	}
+}
