@@ -713,7 +713,7 @@ func fillComments(pullRequests []PullRequest) []PullRequest {
 	return buffer
 }
 
-// fetchPullRequestComments get a pullRequest with comments field
+// fetchPullRequestComments get a PullRequest with comments field
 func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
 	preparedRequest, _ := http.NewRequest(http.MethodGet, pullRequest.Url, nil)
 	preparedRequest.Header = gitHubCommonHeader

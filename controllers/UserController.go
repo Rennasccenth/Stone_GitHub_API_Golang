@@ -3,17 +3,34 @@ package controllers
 import (
 	"Stone_GitHub_API_Golang/cmd"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/patrickmn/go-cache"
 	"log"
 	"net/http"
 	"time"
 )
 
+var cacheLayer = startCacheLayer()
+
+func startCacheLayer() *cache.Cache {
+	c := cache.New(5*time.Minute, 10*time.Minute)
+	return c
+}
+
 func GetUserMostStarredRepo(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	userParam := params["user"]
+	cacheKey := fmt.Sprintf("{Action_1}{%s}", userParam)
+	var mostStarredRepo cmd.Repository
 
-	mostStarredRepo := cmd.GetMostStarredRepository(userParam)
+	cachedResponse, found := cacheLayer.Get(cacheKey)
+	if found {
+		mostStarredRepo, _ = cachedResponse.(cmd.Repository)
+	} else {
+		mostStarredRepo = cmd.GetMostStarredRepository(userParam)
+		cacheLayer.Set(cacheKey, mostStarredRepo, cache.DefaultExpiration)
+	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
@@ -30,8 +47,17 @@ func GetUserMostCommentedOpenedIssue(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	user := params["user"]
 	repository := params["repository"]
+	cacheKey := fmt.Sprintf("{Action_2}{%s}{%s}", user, repository)
 
-	mostCommentedOpenedIssue := cmd.GetMostCommentedIssues(user, repository)
+	var mostCommentedOpenedIssue cmd.Issue
+
+	cachedResponse, found := cacheLayer.Get(cacheKey)
+	if found {
+		mostCommentedOpenedIssue = cachedResponse.(cmd.Issue)
+	} else {
+		mostCommentedOpenedIssue = cmd.GetMostCommentedIssues(user, repository)
+		cacheLayer.Set(cacheKey, mostCommentedOpenedIssue, cache.DefaultExpiration)
+	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
@@ -49,8 +75,16 @@ func GetUserOpenedPullRequests(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	user := params["user"]
 	repository := params["repository"]
+	cacheKey := fmt.Sprintf("{Action_3}{%s}{%s}", user, repository)
+	var nonInteractedPullRequests []cmd.PullRequest
 
-	nonInteractedPullRequests := cmd.GetNonInteractedPullRequests(user, repository)
+	cachedResponse, found := cacheLayer.Get(cacheKey)
+	if found {
+		nonInteractedPullRequests, _ = cachedResponse.([]cmd.PullRequest)
+	} else {
+		nonInteractedPullRequests = cmd.GetNonInteractedPullRequests(user, repository)
+		cacheLayer.Set(cacheKey, nonInteractedPullRequests, cache.DefaultExpiration)
+	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Date", time.Now().String())
