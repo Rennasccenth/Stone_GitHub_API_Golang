@@ -543,19 +543,14 @@ var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 var gitHubCommonHeader = generateCommonHeader()
 
 func GetMostStarredRepository(userLogin string) Repository {
-	repositories, httpStatus := getUserRepositories(userLogin)
-
-	var mostStarredRepo Repository
-	if httpStatus == http.StatusOK {
-		mostStarredRepo = findMostStarredRepository(repositories)
-	}
+	repositories := getUserRepositories(userLogin)
+	mostStarredRepo := findMostStarredRepository(repositories)
 
 	return mostStarredRepo
 }
 
 func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
 	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
-
 	mostCommentedIssue := findMostCommentedOpenedIssue(repositoryIssues)
 
 	return mostCommentedIssue
@@ -563,18 +558,15 @@ func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
 
 func GetNonInteractedPullRequests(userLogin string, repositoryName string) []PullRequest {
 	pullRequestsOnRepo := getPullRequests(userLogin, repositoryName)
-
 	nonInteractedPullRequests := filterNonInteractedPullRequests(pullRequestsOnRepo)
 
 	return nonInteractedPullRequests
 }
 
 // getUserRepositories get all user repositories
-func getUserRepositories(userName string) ([]Repository, int) {
+func getUserRepositories(userName string) []Repository {
 	repositoriesEndpoint := fmt.Sprintf("/users/%s/repos", userName)
-
 	url := gitHubBaseUrl + repositoriesEndpoint
-
 	client := http.Client{}
 
 	preparedRequest, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -583,17 +575,11 @@ func getUserRepositories(userName string) ([]Repository, int) {
 	repositoriesResponse, err := client.Do(preparedRequest)
 	if err != nil {
 		log.Printf("Error na requisição de repositórios.")
-		return nil, http.StatusInternalServerError
-	}
-
-	if repositoriesResponse.StatusCode == http.StatusForbidden {
-		log.Printf("Limite máximo de requests atingidos a GitHub API.")
-		return nil, http.StatusInternalServerError
+		return nil
 	}
 
 	repositories := makeRepositoriesFromBody(repositoriesResponse.Body)
-
-	return repositories, repositoriesResponse.StatusCode
+	return repositories
 }
 
 // getPullRequests get all pull requests on a repository
@@ -622,7 +608,6 @@ func getPullRequests(userLogin string, repositoryName string) []PullRequest {
 func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 	issuesRepositoryEndpoint :=
 		fmt.Sprintf("/repos/%s/%s/issues", userLogin, repositoryName)
-
 	url := gitHubBaseUrl + issuesRepositoryEndpoint
 
 	issuesRequest, _ := http.NewRequest(http.MethodGet, url, nil)
@@ -645,11 +630,11 @@ func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 func getGitHubUser(user string) User {
 	formatedEndpoint := fmt.Sprintf("/users/%s", user)
 	buildedURL := gitHubBaseUrl + formatedEndpoint
+	client := http.Client{}
 
 	userRequest, _ := http.NewRequest(http.MethodGet, buildedURL, nil)
 	userRequest.Header = gitHubCommonHeader
 
-	client := http.Client{}
 	userResponse, err := client.Do(userRequest)
 	if err != nil {
 		log.Print(err)
@@ -664,10 +649,10 @@ func getGitHubUser(user string) User {
 // our requests using the personal access token stored at .env
 func generateAuthenticationHeader() (key string, value string) {
 	personalToken := env.Get("GITHUB_PERSONAL_ACCESS_TOKEN")
+	key = "Authentication"
 
 	header := fmt.Sprintf("token %s", personalToken)
 
-	key = "Authentication"
 	return key, header
 }
 
@@ -676,12 +661,14 @@ func generateAuthenticationHeader() (key string, value string) {
 func findMostStarredRepository(repos []Repository) Repository {
 	var mostStarred Repository
 	starThreshold := 0
+
 	for _, repo := range repos {
 		if repo.StargazersCount >= starThreshold {
 			mostStarred = repo
 			starThreshold = repo.StargazersCount
 		}
 	}
+
 	return mostStarred
 }
 
@@ -689,14 +676,7 @@ func findMostStarredRepository(repos []Repository) Repository {
 // in a array of PullRequest
 func filterNonInteractedPullRequests(pullRequests []PullRequest) []PullRequest {
 	// Nota: Por padrão da API os PR's retornados já estão com status OPEN ;)
-
 	filledPullRequests := fillComments(pullRequests)
-
-	log.Printf("Comments prenchidos")
-	for _, request := range filledPullRequests {
-		log.Print(request.Comments)
-	}
-
 	filteredPullRequests := removeInteractedPullRequests(filledPullRequests)
 
 	return filteredPullRequests
@@ -705,7 +685,6 @@ func filterNonInteractedPullRequests(pullRequests []PullRequest) []PullRequest {
 // fillComments fill an new array of PullRequest with comments field
 func fillComments(pullRequests []PullRequest) []PullRequest {
 	var buffer []PullRequest
-
 	for _, pullRequest := range pullRequests {
 		buffer = append(buffer, fetchPullRequestComments(&pullRequest))
 	}
@@ -715,10 +694,10 @@ func fillComments(pullRequests []PullRequest) []PullRequest {
 
 // fetchPullRequestComments get a PullRequest with comments field
 func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
+	client := http.Client{}
+
 	preparedRequest, _ := http.NewRequest(http.MethodGet, pullRequest.Url, nil)
 	preparedRequest.Header = gitHubCommonHeader
-
-	client := http.Client{}
 
 	pullRequestResponse, _ := client.Do(preparedRequest)
 
@@ -733,7 +712,6 @@ func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
 // non interacted PullRequests
 func removeInteractedPullRequests(prs []PullRequest) []PullRequest {
 	var buffer []PullRequest
-
 	for _, pr := range prs {
 		if pr.Comments == 0 && pr.State == "open" {
 			buffer = append(buffer, pr)
@@ -755,6 +733,7 @@ func findMostCommentedOpenedIssue(issues []Issue) Issue {
 			commentThreshold = issue.Comments
 		}
 	}
+
 	return mostCommentedOpenedIssue
 }
 
@@ -780,6 +759,7 @@ func generateUserFromBody(requestBody io.Reader) User {
 	if err != nil {
 		log.Print(err)
 	}
+
 	return user
 }
 
@@ -793,6 +773,7 @@ func generateIssuesFromBody(requestBody io.Reader) []Issue {
 	if err != nil {
 		log.Print(err)
 	}
+
 	return issues
 }
 
@@ -806,6 +787,7 @@ func makeRepositoriesFromBody(requestBody io.Reader) []Repository {
 	if err != nil {
 		log.Print(err)
 	}
+
 	return repos
 }
 
@@ -819,5 +801,6 @@ func makePullRequestsFromBody(requestBody io.Reader) []PullRequest {
 	if err != nil {
 		log.Print(err)
 	}
+
 	return pullRequests
 }
