@@ -208,16 +208,339 @@ type Issue struct {
 	PerformedViaGithubApp interface{}   `json:"performed_via_github_app"`
 }
 
+type PullRequest struct {
+	Url      string `json:"url"`
+	Id       int    `json:"id"`
+	NodeId   string `json:"node_id"`
+	HtmlUrl  string `json:"html_url"`
+	DiffUrl  string `json:"diff_url"`
+	PatchUrl string `json:"patch_url"`
+	IssueUrl string `json:"issue_url"`
+	Number   int    `json:"number"`
+	State    string `json:"state"`
+	Locked   bool   `json:"locked"`
+	Title    string `json:"title"`
+	User     struct {
+		Login             string `json:"login"`
+		Id                int    `json:"id"`
+		NodeId            string `json:"node_id"`
+		AvatarUrl         string `json:"avatar_url"`
+		GravatarId        string `json:"gravatar_id"`
+		Url               string `json:"url"`
+		HtmlUrl           string `json:"html_url"`
+		FollowersUrl      string `json:"followers_url"`
+		FollowingUrl      string `json:"following_url"`
+		GistsUrl          string `json:"gists_url"`
+		StarredUrl        string `json:"starred_url"`
+		SubscriptionsUrl  string `json:"subscriptions_url"`
+		OrganizationsUrl  string `json:"organizations_url"`
+		ReposUrl          string `json:"repos_url"`
+		EventsUrl         string `json:"events_url"`
+		ReceivedEventsUrl string `json:"received_events_url"`
+		Type              string `json:"type"`
+		SiteAdmin         bool   `json:"site_admin"`
+	} `json:"user"`
+	Body               string        `json:"body"`
+	CreatedAt          time.Time     `json:"created_at"`
+	UpdatedAt          time.Time     `json:"updated_at"`
+	ClosedAt           interface{}   `json:"closed_at"`
+	MergedAt           interface{}   `json:"merged_at"`
+	MergeCommitSha     interface{}   `json:"merge_commit_sha"`
+	Assignee           interface{}   `json:"assignee"`
+	Assignees          []interface{} `json:"assignees"`
+	RequestedReviewers []interface{} `json:"requested_reviewers"`
+	RequestedTeams     []interface{} `json:"requested_teams"`
+	Labels             []interface{} `json:"labels"`
+	Milestone          interface{}   `json:"milestone"`
+	Draft              bool          `json:"draft"`
+	CommitsUrl         string        `json:"commits_url"`
+	ReviewCommentsUrl  string        `json:"review_comments_url"`
+	ReviewCommentUrl   string        `json:"review_comment_url"`
+	CommentsUrl        string        `json:"comments_url"`
+	StatusesUrl        string        `json:"statuses_url"`
+	Head               struct {
+		Label string `json:"label"`
+		Ref   string `json:"ref"`
+		Sha   string `json:"sha"`
+		User  struct {
+			Login             string `json:"login"`
+			Id                int    `json:"id"`
+			NodeId            string `json:"node_id"`
+			AvatarUrl         string `json:"avatar_url"`
+			GravatarId        string `json:"gravatar_id"`
+			Url               string `json:"url"`
+			HtmlUrl           string `json:"html_url"`
+			FollowersUrl      string `json:"followers_url"`
+			FollowingUrl      string `json:"following_url"`
+			GistsUrl          string `json:"gists_url"`
+			StarredUrl        string `json:"starred_url"`
+			SubscriptionsUrl  string `json:"subscriptions_url"`
+			OrganizationsUrl  string `json:"organizations_url"`
+			ReposUrl          string `json:"repos_url"`
+			EventsUrl         string `json:"events_url"`
+			ReceivedEventsUrl string `json:"received_events_url"`
+			Type              string `json:"type"`
+			SiteAdmin         bool   `json:"site_admin"`
+		} `json:"user"`
+		Repo struct {
+			Id       int    `json:"id"`
+			NodeId   string `json:"node_id"`
+			Name     string `json:"name"`
+			FullName string `json:"full_name"`
+			Private  bool   `json:"private"`
+			Owner    struct {
+				Login             string `json:"login"`
+				Id                int    `json:"id"`
+				NodeId            string `json:"node_id"`
+				AvatarUrl         string `json:"avatar_url"`
+				GravatarId        string `json:"gravatar_id"`
+				Url               string `json:"url"`
+				HtmlUrl           string `json:"html_url"`
+				FollowersUrl      string `json:"followers_url"`
+				FollowingUrl      string `json:"following_url"`
+				GistsUrl          string `json:"gists_url"`
+				StarredUrl        string `json:"starred_url"`
+				SubscriptionsUrl  string `json:"subscriptions_url"`
+				OrganizationsUrl  string `json:"organizations_url"`
+				ReposUrl          string `json:"repos_url"`
+				EventsUrl         string `json:"events_url"`
+				ReceivedEventsUrl string `json:"received_events_url"`
+				Type              string `json:"type"`
+				SiteAdmin         bool   `json:"site_admin"`
+			} `json:"owner"`
+			HtmlUrl          string      `json:"html_url"`
+			Description      string      `json:"description"`
+			Fork             bool        `json:"fork"`
+			Url              string      `json:"url"`
+			ForksUrl         string      `json:"forks_url"`
+			KeysUrl          string      `json:"keys_url"`
+			CollaboratorsUrl string      `json:"collaborators_url"`
+			TeamsUrl         string      `json:"teams_url"`
+			HooksUrl         string      `json:"hooks_url"`
+			IssueEventsUrl   string      `json:"issue_events_url"`
+			EventsUrl        string      `json:"events_url"`
+			AssigneesUrl     string      `json:"assignees_url"`
+			BranchesUrl      string      `json:"branches_url"`
+			TagsUrl          string      `json:"tags_url"`
+			BlobsUrl         string      `json:"blobs_url"`
+			GitTagsUrl       string      `json:"git_tags_url"`
+			GitRefsUrl       string      `json:"git_refs_url"`
+			TreesUrl         string      `json:"trees_url"`
+			StatusesUrl      string      `json:"statuses_url"`
+			LanguagesUrl     string      `json:"languages_url"`
+			StargazersUrl    string      `json:"stargazers_url"`
+			ContributorsUrl  string      `json:"contributors_url"`
+			SubscribersUrl   string      `json:"subscribers_url"`
+			SubscriptionUrl  string      `json:"subscription_url"`
+			CommitsUrl       string      `json:"commits_url"`
+			GitCommitsUrl    string      `json:"git_commits_url"`
+			CommentsUrl      string      `json:"comments_url"`
+			IssueCommentUrl  string      `json:"issue_comment_url"`
+			ContentsUrl      string      `json:"contents_url"`
+			CompareUrl       string      `json:"compare_url"`
+			MergesUrl        string      `json:"merges_url"`
+			ArchiveUrl       string      `json:"archive_url"`
+			DownloadsUrl     string      `json:"downloads_url"`
+			IssuesUrl        string      `json:"issues_url"`
+			PullsUrl         string      `json:"pulls_url"`
+			MilestonesUrl    string      `json:"milestones_url"`
+			NotificationsUrl string      `json:"notifications_url"`
+			LabelsUrl        string      `json:"labels_url"`
+			ReleasesUrl      string      `json:"releases_url"`
+			DeploymentsUrl   string      `json:"deployments_url"`
+			CreatedAt        time.Time   `json:"created_at"`
+			UpdatedAt        time.Time   `json:"updated_at"`
+			PushedAt         time.Time   `json:"pushed_at"`
+			GitUrl           string      `json:"git_url"`
+			SshUrl           string      `json:"ssh_url"`
+			CloneUrl         string      `json:"clone_url"`
+			SvnUrl           string      `json:"svn_url"`
+			Homepage         interface{} `json:"homepage"`
+			Size             int         `json:"size"`
+			StargazersCount  int         `json:"stargazers_count"`
+			WatchersCount    int         `json:"watchers_count"`
+			Language         string      `json:"language"`
+			HasIssues        bool        `json:"has_issues"`
+			HasProjects      bool        `json:"has_projects"`
+			HasDownloads     bool        `json:"has_downloads"`
+			HasWiki          bool        `json:"has_wiki"`
+			HasPages         bool        `json:"has_pages"`
+			ForksCount       int         `json:"forks_count"`
+			MirrorUrl        interface{} `json:"mirror_url"`
+			Archived         bool        `json:"archived"`
+			Disabled         bool        `json:"disabled"`
+			OpenIssuesCount  int         `json:"open_issues_count"`
+			License          interface{} `json:"license"`
+			Forks            int         `json:"forks"`
+			OpenIssues       int         `json:"open_issues"`
+			Watchers         int         `json:"watchers"`
+			DefaultBranch    string      `json:"default_branch"`
+		} `json:"repo"`
+	} `json:"head"`
+	Base struct {
+		Label string `json:"label"`
+		Ref   string `json:"ref"`
+		Sha   string `json:"sha"`
+		User  struct {
+			Login             string `json:"login"`
+			Id                int    `json:"id"`
+			NodeId            string `json:"node_id"`
+			AvatarUrl         string `json:"avatar_url"`
+			GravatarId        string `json:"gravatar_id"`
+			Url               string `json:"url"`
+			HtmlUrl           string `json:"html_url"`
+			FollowersUrl      string `json:"followers_url"`
+			FollowingUrl      string `json:"following_url"`
+			GistsUrl          string `json:"gists_url"`
+			StarredUrl        string `json:"starred_url"`
+			SubscriptionsUrl  string `json:"subscriptions_url"`
+			OrganizationsUrl  string `json:"organizations_url"`
+			ReposUrl          string `json:"repos_url"`
+			EventsUrl         string `json:"events_url"`
+			ReceivedEventsUrl string `json:"received_events_url"`
+			Type              string `json:"type"`
+			SiteAdmin         bool   `json:"site_admin"`
+		} `json:"user"`
+		Repo struct {
+			Id       int    `json:"id"`
+			NodeId   string `json:"node_id"`
+			Name     string `json:"name"`
+			FullName string `json:"full_name"`
+			Private  bool   `json:"private"`
+			Owner    struct {
+				Login             string `json:"login"`
+				Id                int    `json:"id"`
+				NodeId            string `json:"node_id"`
+				AvatarUrl         string `json:"avatar_url"`
+				GravatarId        string `json:"gravatar_id"`
+				Url               string `json:"url"`
+				HtmlUrl           string `json:"html_url"`
+				FollowersUrl      string `json:"followers_url"`
+				FollowingUrl      string `json:"following_url"`
+				GistsUrl          string `json:"gists_url"`
+				StarredUrl        string `json:"starred_url"`
+				SubscriptionsUrl  string `json:"subscriptions_url"`
+				OrganizationsUrl  string `json:"organizations_url"`
+				ReposUrl          string `json:"repos_url"`
+				EventsUrl         string `json:"events_url"`
+				ReceivedEventsUrl string `json:"received_events_url"`
+				Type              string `json:"type"`
+				SiteAdmin         bool   `json:"site_admin"`
+			} `json:"owner"`
+			HtmlUrl          string      `json:"html_url"`
+			Description      string      `json:"description"`
+			Fork             bool        `json:"fork"`
+			Url              string      `json:"url"`
+			ForksUrl         string      `json:"forks_url"`
+			KeysUrl          string      `json:"keys_url"`
+			CollaboratorsUrl string      `json:"collaborators_url"`
+			TeamsUrl         string      `json:"teams_url"`
+			HooksUrl         string      `json:"hooks_url"`
+			IssueEventsUrl   string      `json:"issue_events_url"`
+			EventsUrl        string      `json:"events_url"`
+			AssigneesUrl     string      `json:"assignees_url"`
+			BranchesUrl      string      `json:"branches_url"`
+			TagsUrl          string      `json:"tags_url"`
+			BlobsUrl         string      `json:"blobs_url"`
+			GitTagsUrl       string      `json:"git_tags_url"`
+			GitRefsUrl       string      `json:"git_refs_url"`
+			TreesUrl         string      `json:"trees_url"`
+			StatusesUrl      string      `json:"statuses_url"`
+			LanguagesUrl     string      `json:"languages_url"`
+			StargazersUrl    string      `json:"stargazers_url"`
+			ContributorsUrl  string      `json:"contributors_url"`
+			SubscribersUrl   string      `json:"subscribers_url"`
+			SubscriptionUrl  string      `json:"subscription_url"`
+			CommitsUrl       string      `json:"commits_url"`
+			GitCommitsUrl    string      `json:"git_commits_url"`
+			CommentsUrl      string      `json:"comments_url"`
+			IssueCommentUrl  string      `json:"issue_comment_url"`
+			ContentsUrl      string      `json:"contents_url"`
+			CompareUrl       string      `json:"compare_url"`
+			MergesUrl        string      `json:"merges_url"`
+			ArchiveUrl       string      `json:"archive_url"`
+			DownloadsUrl     string      `json:"downloads_url"`
+			IssuesUrl        string      `json:"issues_url"`
+			PullsUrl         string      `json:"pulls_url"`
+			MilestonesUrl    string      `json:"milestones_url"`
+			NotificationsUrl string      `json:"notifications_url"`
+			LabelsUrl        string      `json:"labels_url"`
+			ReleasesUrl      string      `json:"releases_url"`
+			DeploymentsUrl   string      `json:"deployments_url"`
+			CreatedAt        time.Time   `json:"created_at"`
+			UpdatedAt        time.Time   `json:"updated_at"`
+			PushedAt         time.Time   `json:"pushed_at"`
+			GitUrl           string      `json:"git_url"`
+			SshUrl           string      `json:"ssh_url"`
+			CloneUrl         string      `json:"clone_url"`
+			SvnUrl           string      `json:"svn_url"`
+			Homepage         interface{} `json:"homepage"`
+			Size             int         `json:"size"`
+			StargazersCount  int         `json:"stargazers_count"`
+			WatchersCount    int         `json:"watchers_count"`
+			Language         string      `json:"language"`
+			HasIssues        bool        `json:"has_issues"`
+			HasProjects      bool        `json:"has_projects"`
+			HasDownloads     bool        `json:"has_downloads"`
+			HasWiki          bool        `json:"has_wiki"`
+			HasPages         bool        `json:"has_pages"`
+			ForksCount       int         `json:"forks_count"`
+			MirrorUrl        interface{} `json:"mirror_url"`
+			Archived         bool        `json:"archived"`
+			Disabled         bool        `json:"disabled"`
+			OpenIssuesCount  int         `json:"open_issues_count"`
+			License          interface{} `json:"license"`
+			Forks            int         `json:"forks"`
+			OpenIssues       int         `json:"open_issues"`
+			Watchers         int         `json:"watchers"`
+			DefaultBranch    string      `json:"default_branch"`
+		} `json:"repo"`
+	} `json:"base"`
+	Links struct {
+		Self struct {
+			Href string `json:"href"`
+		} `json:"self"`
+		Html struct {
+			Href string `json:"href"`
+		} `json:"html"`
+		Issue struct {
+			Href string `json:"href"`
+		} `json:"issue"`
+		Comments struct {
+			Href string `json:"href"`
+		} `json:"comments"`
+		ReviewComments struct {
+			Href string `json:"href"`
+		} `json:"review_comments"`
+		ReviewComment struct {
+			Href string `json:"href"`
+		} `json:"review_comment"`
+		Commits struct {
+			Href string `json:"href"`
+		} `json:"commits"`
+		Statuses struct {
+			Href string `json:"href"`
+		} `json:"statuses"`
+	} `json:"_links"`
+	AuthorAssociation   string      `json:"author_association"`
+	AutoMerge           interface{} `json:"auto_merge"`
+	ActiveLockReason    interface{} `json:"active_lock_reason"`
+	Merged              bool        `json:"merged"`
+	Mergeable           bool        `json:"mergeable"`
+	Rebaseable          bool        `json:"rebaseable"`
+	MergeableState      string      `json:"mergeable_state"`
+	MergedBy            interface{} `json:"merged_by"`
+	Comments            int         `json:"comments"`
+	ReviewComments      int         `json:"review_comments"`
+	MaintainerCanModify bool        `json:"maintainer_can_modify"`
+	Commits             int         `json:"commits"`
+	Additions           int         `json:"additions"`
+	Deletions           int         `json:"deletions"`
+	ChangedFiles        int         `json:"changed_files"`
+}
+
 var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 var gitHubCommonHeader = generateCommonHeader()
-
-func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
-	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
-
-	mostCommentedIssue := findMostCommentedOpenedIssue(repositoryIssues)
-
-	return mostCommentedIssue
-}
 
 func GetMostStarredRepository(userLogin string) Repository {
 	user := getGitHubUser(userLogin)
@@ -229,17 +552,54 @@ func GetMostStarredRepository(userLogin string) Repository {
 	preparedRequest, _ := http.NewRequest(http.MethodGet, repositoriesURL, nil)
 	preparedRequest.Header = gitHubCommonHeader
 
-	response, err := client.Do(preparedRequest)
+	repositoriesResponse, err := client.Do(preparedRequest)
 	if err != nil {
 		log.Printf("Error na requisição de repositórios.")
 		return Repository{}
 	}
 
-	repositories := makeRepositoriesFromBody(response.Body)
+	repositories := makeRepositoriesFromBody(repositoriesResponse.Body)
 
 	mostStarredRepo := findMostStarredRepository(repositories)
 
 	return mostStarredRepo
+}
+
+func GetMostCommentedIssues(userLogin string, repositoryName string) Issue {
+	repositoryIssues := getRepositoryIssues(userLogin, repositoryName)
+
+	mostCommentedIssue := findMostCommentedOpenedIssue(repositoryIssues)
+
+	return mostCommentedIssue
+}
+
+func GetNonInteractedPullRequests(userLogin string, repositoryName string) []PullRequest {
+	pullRequestsOnRepo := getPullRequests(userLogin, repositoryName)
+
+	nonInteractedPullRequests := filterNonInteractedPullRequests(pullRequestsOnRepo)
+
+	return nonInteractedPullRequests
+}
+
+// getPullRequests get all pull requests on a repository
+func getPullRequests(userLogin string, repositoryName string) []PullRequest {
+	pullRequestsEndpoint :=
+		fmt.Sprintf("/repos/%s/%s/pulls", userLogin, repositoryName)
+	url := gitHubBaseUrl + pullRequestsEndpoint
+
+	preparedRequest, _ := http.NewRequest(http.MethodGet, url, nil)
+	preparedRequest.Header = gitHubCommonHeader
+
+	client := http.Client{}
+
+	pullRequestResponse, err := client.Do(preparedRequest)
+	if err != nil {
+		return nil
+	}
+
+	pullRequests := makePullRequestsFromBody(pullRequestResponse.Body)
+
+	return pullRequests
 }
 
 // getRepositoryIssues gets a array of Issue based on a userLogin and
@@ -255,13 +615,13 @@ func getRepositoryIssues(userLogin string, repositoryName string) []Issue {
 
 	client := http.Client{}
 
-	request, err := client.Do(issuesRequest)
+	issuesResponse, err := client.Do(issuesRequest)
 	if err != nil {
 		log.Printf("Error na requisição das issues do %s.", repositoryName)
 		return nil
 	}
 
-	issues := generateIssuesFromBody(request.Body)
+	issues := generateIssuesFromBody(issuesResponse.Body)
 
 	return issues
 }
@@ -310,6 +670,64 @@ func findMostStarredRepository(repos []Repository) Repository {
 	return mostStarred
 }
 
+// filterNonInteractedPullRequests get only non interacted PullRequest
+// in a array of PullRequest
+func filterNonInteractedPullRequests(pullRequests []PullRequest) []PullRequest {
+	// Nota: Por padrão da API os PR's retornados já estão com status OPEN ;)
+
+	filledPullRequests := fillComments(pullRequests)
+
+	log.Printf("Comments prenchidos")
+	for _, request := range filledPullRequests {
+		log.Print(request.Comments)
+	}
+
+	filteredPullRequests := removeInteractedPullRequests(filledPullRequests)
+
+	return filteredPullRequests
+}
+
+// fillComments fill an new array of PullRequest with comments field
+func fillComments(pullRequests []PullRequest) []PullRequest {
+	var buffer []PullRequest
+
+	for _, pullRequest := range pullRequests {
+		buffer = append(buffer, fetchPullRequestComments(&pullRequest))
+	}
+
+	return buffer
+}
+
+// fetchPullRequestComments get a pullRequest with comments field
+func fetchPullRequestComments(pullRequest *PullRequest) PullRequest {
+	preparedRequest, _ := http.NewRequest(http.MethodGet, pullRequest.Url, nil)
+	preparedRequest.Header = gitHubCommonHeader
+
+	client := http.Client{}
+
+	pullRequestResponse, _ := client.Do(preparedRequest)
+
+	bodyBytes, _ := ioutil.ReadAll(pullRequestResponse.Body)
+	buffer := PullRequest{}
+	_ = json.Unmarshal(bodyBytes, &buffer)
+
+	return buffer
+}
+
+// removeInteractedPullRequests retuns a new PullRequest array with only
+// non interacted PullRequests
+func removeInteractedPullRequests(prs []PullRequest) []PullRequest {
+	var buffer []PullRequest
+
+	for _, pr := range prs {
+		if pr.Comments == 0 && pr.State == "open" {
+			buffer = append(buffer, pr)
+		}
+	}
+
+	return buffer
+}
+
 // findMostCommentedOpenedIssue find the most commented and opened
 // Issue
 func findMostCommentedOpenedIssue(issues []Issue) Issue {
@@ -331,7 +749,7 @@ func generateCommonHeader() http.Header {
 	hostname, _ := os.Hostname()
 	header := http.Header{}
 	header.Add(generateAuthenticationHeader())
-	header.Add("Accept", "*/*")
+	header.Add("Accept", "application/vnd.github.v3+json")
 	header.Add("Connection", "keep-alive")
 	header.Add("Host", hostname)
 
@@ -374,4 +792,17 @@ func makeRepositoriesFromBody(requestBody io.Reader) []Repository {
 		log.Print(err)
 	}
 	return repos
+}
+
+// makePullRequestsFromBody creates a array of
+// PullRequest from a io.Reader generally provided
+// by a http.Request
+func makePullRequestsFromBody(requestBody io.Reader) []PullRequest {
+	bodyBytes, _ := ioutil.ReadAll(requestBody)
+	pullRequests := make([]PullRequest, 0)
+	err := json.Unmarshal(bodyBytes, &pullRequests)
+	if err != nil {
+		log.Print(err)
+	}
+	return pullRequests
 }
