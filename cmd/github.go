@@ -543,24 +543,12 @@ var gitHubBaseUrl = env.Get("GITHUB_BASE_URL")
 var gitHubCommonHeader = generateCommonHeader()
 
 func GetMostStarredRepository(userLogin string) Repository {
-	user := getGitHubUser(userLogin)
+	repositories, httpStatus := getUserRepositories(userLogin)
 
-	repositoriesURL := user.ReposUrl
-
-	client := http.Client{}
-
-	preparedRequest, _ := http.NewRequest(http.MethodGet, repositoriesURL, nil)
-	preparedRequest.Header = gitHubCommonHeader
-
-	repositoriesResponse, err := client.Do(preparedRequest)
-	if err != nil {
-		log.Printf("Error na requisição de repositórios.")
-		return Repository{}
+	var mostStarredRepo Repository
+	if httpStatus == http.StatusOK {
+		mostStarredRepo = findMostStarredRepository(repositories)
 	}
-
-	repositories := makeRepositoriesFromBody(repositoriesResponse.Body)
-
-	mostStarredRepo := findMostStarredRepository(repositories)
 
 	return mostStarredRepo
 }
@@ -579,6 +567,33 @@ func GetNonInteractedPullRequests(userLogin string, repositoryName string) []Pul
 	nonInteractedPullRequests := filterNonInteractedPullRequests(pullRequestsOnRepo)
 
 	return nonInteractedPullRequests
+}
+
+// getUserRepositories get all user repositories
+func getUserRepositories(userName string) ([]Repository, int) {
+	repositoriesEndpoint := fmt.Sprintf("/users/%s/repos", userName)
+
+	url := gitHubBaseUrl + repositoriesEndpoint
+
+	client := http.Client{}
+
+	preparedRequest, _ := http.NewRequest(http.MethodGet, url, nil)
+	preparedRequest.Header = gitHubCommonHeader
+
+	repositoriesResponse, err := client.Do(preparedRequest)
+	if err != nil {
+		log.Printf("Error na requisição de repositórios.")
+		return nil, http.StatusInternalServerError
+	}
+
+	if repositoriesResponse.StatusCode == http.StatusForbidden {
+		log.Printf("Limite máximo de requests atingidos a GitHub API.")
+		return nil, http.StatusInternalServerError
+	}
+
+	repositories := makeRepositoriesFromBody(repositoriesResponse.Body)
+
+	return repositories, repositoriesResponse.StatusCode
 }
 
 // getPullRequests get all pull requests on a repository
