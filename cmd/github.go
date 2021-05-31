@@ -770,7 +770,7 @@ func generateCommonHeader() http.Header {
 // generateUserFromBody creates a User from a
 // io.Reader generally provided by a http.Request
 func generateUserFromBody(requestBody io.Reader) User {
-	user := User{}
+	var user User
 	bodyBytes, _ := ioutil.ReadAll(requestBody)
 	err := json.Unmarshal(bodyBytes, &user)
 	if err != nil {
@@ -802,7 +802,6 @@ func makeRepositoriesFromBody(requestBody io.Reader) []Repository {
 	repos := make([]Repository, 0)
 	err := json.Unmarshal(bodyBytes, &repos)
 	if err != nil {
-		log.Printf("é aqui no makeRepositoriesFromBody")
 		log.Print(err)
 	}
 
