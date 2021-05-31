@@ -1,4 +1,4 @@
-package cmd
+package pgk
 
 import (
 	"encoding/json"
