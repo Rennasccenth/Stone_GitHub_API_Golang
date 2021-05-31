@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"Stone_GitHub_API_Golang/env"
 	"encoding/json"
 	"fmt"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/env"
 	"io"
 	"io/ioutil"
 	"log"
