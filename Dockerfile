@@ -1,11 +1,37 @@
-FROM amd64/golang:1.16
+FROM golang:alpine
 
-ENV GO111MODULE=on
+# Set necessary environmet variables needed for our image
+ENV GO111MODULE=on \
+    CGO_ENABLED=0 \
+    GOOS=linux \
+    GOARCH=amd64
 
-WORKDIR /go/src/Stone_GitHub_API_Golang
+# Move to working directory /build
+WORKDIR /build
+
+# Copy and download dependency using go mod
+COPY .env .
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+# Copy the code into the container
 COPY . .
 
-RUN go get -d -v ./...
-RUN go install -v ./...
+# Build the application
+RUN go build -o main .
 
-CMD ["Stone_GitHub_API_Golang"]
+# Move to /dist directory as the place for resulting binary folder
+WORKDIR /dist
+
+# Copy binary from build to main folder
+RUN cp /build/main .
+
+# Move .env to final workdir
+RUN cp /build/.env .
+
+# Export necessary port
+EXPOSE 8080
+
+# Command to run when starting the container
+CMD ["/dist/main"]
