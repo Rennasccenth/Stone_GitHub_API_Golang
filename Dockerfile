@@ -10,6 +10,7 @@ ENV GO111MODULE=on \
 WORKDIR /build
 
 # Copy and download dependency using go mod
+COPY .env .
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
@@ -25,6 +26,9 @@ WORKDIR /dist
 
 # Copy binary from build to main folder
 RUN cp /build/main .
+
+# Move .env to final workdir
+RUN cp /build/.env .
 
 # Export necessary port
 EXPOSE 8080

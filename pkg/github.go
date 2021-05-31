@@ -1,9 +1,9 @@
-package cmd
+package pkg
 
 import (
-	"Stone_GitHub_API_Golang/env"
 	"encoding/json"
 	"fmt"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/env"
 	"io"
 	"io/ioutil"
 	"log"
@@ -589,6 +589,7 @@ func getUserRepositories(userName string) []Repository {
 	if repositoriesResponse.StatusCode == http.StatusOK {
 		repositories = makeRepositoriesFromBody(repositoriesResponse.Body)
 	}
+
 	return repositories
 }
 
