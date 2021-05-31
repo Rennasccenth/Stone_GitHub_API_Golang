@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/patrickmn/go-cache"
-	"github.com/rennasccenth/Stone_GitHub_API_Golang/pgk"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/pkg"
 	"time"
 )
 
@@ -15,52 +15,52 @@ func startCacheLayer() *cache.Cache {
 	return c
 }
 
-// GetUserMostStarredRepository tries to get the most starred pgk.Repository
+// GetUserMostStarredRepository tries to get the most starred pkg.Repository
 // on cache layer. If not found, fetches and updates the cache.
-func GetUserMostStarredRepository(userLogin string) (mostStarredRepo pgk.Repository, isCached bool) {
+func GetUserMostStarredRepository(userLogin string) (mostStarredRepo pkg.Repository, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_1}{%s}", userLogin)
 	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
-		mostStarredRepo, _ = cachedResponse.(pgk.Repository)
+		mostStarredRepo, _ = cachedResponse.(pkg.Repository)
 		return mostStarredRepo, true
 	}
-	mostStarredRepo = pgk.GetUserMostStarredRepository(userLogin)
+	mostStarredRepo = pkg.GetUserMostStarredRepository(userLogin)
 	cacheLayer.Set(cacheKey, mostStarredRepo, cache.DefaultExpiration)
 
 	return mostStarredRepo, false
 }
 
-// GetMostCommentedIssue tries to get the most commented pgk.Issue
+// GetMostCommentedIssue tries to get the most commented pkg.Issue
 // on cache layer. If not found , fetches and updates the cache
-func GetMostCommentedIssue(user string, repository string) (mostCommentedOpenedIssue pgk.Issue, isCached bool) {
+func GetMostCommentedIssue(user string, repository string) (mostCommentedOpenedIssue pkg.Issue, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_2}{%s}{%s}", user, repository)
 	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
-		mostCommentedOpenedIssue = cachedResponse.(pgk.Issue)
+		mostCommentedOpenedIssue = cachedResponse.(pkg.Issue)
 		return mostCommentedOpenedIssue, true
 	}
-	mostCommentedOpenedIssue = pgk.GetMostCommentedIssue(user, repository)
+	mostCommentedOpenedIssue = pkg.GetMostCommentedIssue(user, repository)
 	cacheLayer.Set(cacheKey, mostCommentedOpenedIssue, cache.DefaultExpiration)
 
 	return mostCommentedOpenedIssue, false
 }
 
-// GetNonInteractedPullRequests tries to get all non interacted pgk.PullRequest
-// of a pgk.Repository on cache layer. If not found , fetches and updates the cache.
-func GetNonInteractedPullRequests(user string, repository string) (nonInteractedPullRequests []pgk.PullRequest, isCached bool) {
+// GetNonInteractedPullRequests tries to get all non interacted pkg.PullRequest
+// of a pkg.Repository on cache layer. If not found , fetches and updates the cache.
+func GetNonInteractedPullRequests(user string, repository string) (nonInteractedPullRequests []pkg.PullRequest, isCached bool) {
 	cacheKey := fmt.Sprintf("{Action_3}{%s}{%s}", user, repository)
 	isCached = false
 
 	cachedResponse, found := cacheLayer.Get(cacheKey)
 	if found {
-		nonInteractedPullRequests, _ = cachedResponse.([]pgk.PullRequest)
+		nonInteractedPullRequests, _ = cachedResponse.([]pkg.PullRequest)
 		return nonInteractedPullRequests, true
 	}
-	nonInteractedPullRequests = pgk.GetNonInteractedPullRequests(user, repository)
+	nonInteractedPullRequests = pkg.GetNonInteractedPullRequests(user, repository)
 	cacheLayer.Set(cacheKey, nonInteractedPullRequests, cache.DefaultExpiration)
 
 	return nonInteractedPullRequests, false

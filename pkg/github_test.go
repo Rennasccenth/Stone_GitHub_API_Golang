@@ -1,4 +1,4 @@
-package pgk
+package pkg
 
 import (
 	"reflect"
@@ -16,7 +16,7 @@ func TestGetUserMostStarredRepository(t *testing.T) {
 		t.Log("GetMostStarredRepository PASSED")
 	} else {
 		t.Errorf("GetMostStarredRepository FAILED, expected %v but got %v",
-			evaluatedResult, expectedResult)
+			expectedResult, evaluatedResult)
 	}
 }
 
@@ -32,7 +32,7 @@ func TestGetMostCommentedIssue(t *testing.T) {
 		t.Log("GetGetMostCommentedIssue PASSED")
 	} else {
 		t.Errorf("GetGetMostCommentedIssue FAILED, expected %v but got %v",
-			evaluatedResult, expectedResult)
+			expectedResult, evaluatedResult)
 	}
 }
 

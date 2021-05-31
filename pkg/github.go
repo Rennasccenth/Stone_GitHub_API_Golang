@@ -1,4 +1,4 @@
-package pgk
+package pkg
 
 import (
 	"encoding/json"
@@ -589,6 +589,7 @@ func getUserRepositories(userName string) []Repository {
 	if repositoriesResponse.StatusCode == http.StatusOK {
 		repositories = makeRepositoriesFromBody(repositoriesResponse.Body)
 	}
+
 	return repositories
 }
 
