@@ -1,6 +1,11 @@
 # Stone_GitHub_API_Golang
 Teste prático para vaga de back-end Python / Go na Stone.
 
+
+`Nota 1: Utilizar a branch Release`<br>
+`Nota 2: É necessário adicionar o TOKEN de acesso do GITHUB no .ENV da Aplicação.`
+
+
 ## 1 - Como subir a api?
 Após clonar o repositório, a estrutura de pastas deve ficar em algo como:
 
@@ -30,3 +35,18 @@ Para facilitar os testes, deixarei a collection do postman com as requisições 
 ## Aos reviewers!
 Essa foi minha primeira experiência com Golang, conhecia a linguagem somente por cima e sabia que lembrava um pouco de C, então aceitei o desafio/sugestão da Lídia de fazer o teste na linguagem que eu menos tinha domínio (nesse caso era 0 mesmo uheuhuaheu).
 Dito isso, caso tenham algo a acrescentar ou apontar erros cometidos, sintam-se totalmente a vontade!
+
+## O que foi feito?
+
+- [x] Dockerização
+- [x] Documentação
+- [x] Testes
+
+### Tier 1
+- [x] Retornar Repositório com mais Stars.
+- [x] Retornar a Issue aberta que possui mais comentários.
+- [x] Retornar os Pull Requests abertos que ainda não foram interagidos.
+
+### Tier 2
+- [x] Implementação de uma camada de cache, para as rotas do tier 1.
+

@@ -5,59 +5,6 @@ import (
 	"testing"
 )
 
-func TestGetUserMostStarredRepository(t *testing.T) {
-	userNameTest := "Rennasccenth"
-	expectedResult := "Rennasccenth/Stone_GitHub_API_Golang"
-
-	result := GetUserMostStarredRepository(userNameTest)
-	evaluatedResult := result.FullName
-
-	if reflect.DeepEqual(evaluatedResult, expectedResult) {
-		t.Log("GetMostStarredRepository PASSED")
-	} else {
-		t.Errorf("GetMostStarredRepository FAILED, expected %v but got %v",
-			expectedResult, evaluatedResult)
-	}
-}
-
-func TestGetMostCommentedIssue(t *testing.T) {
-	userNameTest := "Rennasccenth"
-	repositoryNameTest := "Stone_GitHub_API_Golang"
-	expectedResult := "Issue com mais comentários"
-
-	result := GetMostCommentedIssue(userNameTest, repositoryNameTest)
-	evaluatedResult := result.Title
-
-	if reflect.DeepEqual(evaluatedResult, expectedResult) {
-		t.Log("GetGetMostCommentedIssue PASSED")
-	} else {
-		t.Errorf("GetGetMostCommentedIssue FAILED, expected %v but got %v",
-			expectedResult, evaluatedResult)
-	}
-}
-
-func TestGetNonInteractedPullRequests(t *testing.T) {
-	userNameTest := "Rennasccenth"
-	repositoryNameTest := "Stone_GitHub_API_Golang"
-
-	result := GetNonInteractedPullRequests(userNameTest, repositoryNameTest)
-	expectedResult := 0
-	alreadyInteractedCounter := 0
-
-	for _, pr := range result {
-		if pr.Comments != 0 {
-			alreadyInteractedCounter++
-		}
-	}
-
-	if reflect.DeepEqual(alreadyInteractedCounter, 0) {
-		t.Log("GetNonInteractedPullRequests PASSED")
-	} else {
-		t.Errorf("GetNonInteractedPullRequests FAILED, expected %d but got %d repositories interacted.",
-			expectedResult, alreadyInteractedCounter)
-	}
-}
-
 func TestFindMostStarredRepository(t *testing.T) {
 	var mockedRepositories []Repository
 
