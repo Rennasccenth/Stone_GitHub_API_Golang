@@ -6,3 +6,5 @@ github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/patrickmn/go-cache v2.1.0+incompatible h1:HRMgzkcYKYpi3C8ajMPV8OFXaaRUnok+kx1WdO15EQc=
 github.com/patrickmn/go-cache v2.1.0+incompatible/go.mod h1:3Qf8kWWT7OJRJbdiICTKqZju1ZixQ/KpMGzzAfe6+WQ=
+github.com/rennasccenth/Stone_GitHub_API_Golang v0.0.0-20210601122919-02fc1bef0bb2 h1:NBJBUDW4nz1JlTi7BCchDHQ6bZbGFlc0+HB25JbBNGY=
+github.com/rennasccenth/Stone_GitHub_API_Golang v0.0.0-20210601122919-02fc1bef0bb2/go.mod h1:RlQG92PzOT2DXx0UeCrBE2gM8Iy5QAsm/t5eW3xXjh8=
