@@ -1,27 +1,27 @@
 package main
 
 import (
-	"Stone_GitHub_API_Golang/controllers"
-	"Stone_GitHub_API_Golang/env"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/controllers"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/env"
 	"log"
 	"net/http"
 )
 
 func main() {
-	routerHander := mux.NewRouter()
+	routerHandler := mux.NewRouter()
 
-	routerHander.HandleFunc("/users/{user}/popular-repository",
+	routerHandler.HandleFunc("/users/{user}/popular-repository",
 		controllers.GetUserMostStarredRepo).Methods(http.MethodGet)
 
-	routerHander.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
+	routerHandler.HandleFunc("/users/{user}/repositories/{repository}/popular-issue",
 		controllers.GetUserMostCommentedOpenedIssue).Methods(http.MethodGet)
 
-	routerHander.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
+	routerHandler.HandleFunc("/users/{user}/repositories/{repository}/open-pull-requests",
 		controllers.GetUserOpenedPullRequests).Methods(http.MethodGet)
 
-	serveOnDefaultPort(routerHander)
+	serveOnDefaultPort(routerHandler)
 }
 
 // serveOnDefaultPort serves the handler on the port

@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	handler "Stone_GitHub_API_Golang/handler"
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/rennasccenth/Stone_GitHub_API_Golang/handler"
 	"log"
 	"net/http"
 	"time"
