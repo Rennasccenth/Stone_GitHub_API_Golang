@@ -9,15 +9,15 @@ import (
 func TestCacheOnGetUserMostStarredRepository(t *testing.T) {
 	mockRandomUsername := uniuri.NewLen(10)
 
-	_, isCached := GetUserMostStarredRepository(mockRandomUsername)
+	_, cacheKey := GetUserMostStarredRepository(mockRandomUsername)
 
-	_, isCached = GetUserMostStarredRepository(mockRandomUsername)
+	_, found := cacheLayer.Get(cacheKey)
 
-	if reflect.DeepEqual(isCached, true) {
+	if reflect.DeepEqual(true, found) {
 		t.Log("CacheOnGetUserMostStarredRepository PASSED")
 	} else {
 		t.Errorf("CacheOnGetUserMostStarredRepository FAILED, expected %v but got %v",
-			true, isCached)
+			true, found)
 	}
 }
 
@@ -25,14 +25,15 @@ func TestCacheGetMostCommentedIssue(t *testing.T) {
 	mockRandomUsername := uniuri.NewLen(10)
 	mockRandomRepository := uniuri.NewLen(10)
 
-	_, isCached := GetMostCommentedIssue(mockRandomUsername, mockRandomRepository)
-	_, isCached = GetMostCommentedIssue(mockRandomUsername, mockRandomRepository)
+	_, cacheKey := GetMostCommentedIssue(mockRandomUsername, mockRandomRepository)
 
-	if reflect.DeepEqual(isCached, true) {
+	_, found := cacheLayer.Get(cacheKey)
+
+	if reflect.DeepEqual(true, found) {
 		t.Log("TestCacheGetMostCommentedIssue PASSED")
 	} else {
 		t.Errorf("TestCacheGetMostCommentedIssue FAILED, expected %v but got %v",
-			true, isCached)
+			true, found)
 	}
 }
 
@@ -40,13 +41,14 @@ func TestCacheGetNonInteractedPullRequests(t *testing.T) {
 	mockRandomUsername := uniuri.NewLen(10)
 	mockRandomRepository := uniuri.NewLen(10)
 
-	_, isCached := GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
-	_, isCached = GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
+	_, cacheKey := GetNonInteractedPullRequests(mockRandomUsername, mockRandomRepository)
 
-	if reflect.DeepEqual(isCached, true) {
+	_, found := cacheLayer.Get(cacheKey)
+
+	if reflect.DeepEqual(found, true) {
 		t.Log("TestCacheGetNonInteractedPullRequests PASSED")
 	} else {
 		t.Errorf("TestCacheGetNonInteractedPullRequests FAILED, expected %v but got %v",
-			true, isCached)
+			true, found)
 	}
 }
