@@ -2,8 +2,8 @@
 Teste prático para vaga de back-end Python / Go na Stone.
 
 
-*Nota 1: Utilizar a branch Release*
-*Nota 2: É necessário adicionar o TOKEN de acesso do GITHUB no .ENV da Aplicação.*
+`Nota 1: Utilizar a branch Release`<br>
+`Nota 2: É necessário adicionar o TOKEN de acesso do GITHUB no .ENV da Aplicação.`
 
 
 ## 1 - Como subir a api?
