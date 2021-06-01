@@ -1,6 +1,9 @@
 # Stone_GitHub_API_Golang
 Teste prático para vaga de back-end Python / Go na Stone.
 
+
+*Nota: Utilizar a branch Release*
+
 ## 1 - Como subir a api?
 Após clonar o repositório, a estrutura de pastas deve ficar em algo como:
 
